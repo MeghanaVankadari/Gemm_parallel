@@ -46,7 +46,7 @@ int main(int argc,char *argv[]) {
 	for (c = 0; c < size; c++) {
       		for (d = 0; d < size; d++) {
         		for (k = 0; k < size; k++) {
-          			sum = sum + *(first + c*size + k) + *(second+ k*size+d);
+          			sum = sum + *(first + c*size + k) * *(second+ k*size+d);
         		}
  
         	*(multiply+size*c+d) = sum;
