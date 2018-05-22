@@ -1,0 +1,39 @@
+#include<stdio.h>
+#include<stdlib.h>
+
+int main(int argc,char *argv[])
+{
+	if(argc!=3)
+	{
+		printf("usage: ./a.out size iterations\n");
+		exit(1);
+	}
+	
+	int size = atoi(argv[1]);
+	int iterations = atoi(argv[2]);
+	printf("size = %d , iterations = %d\n",size,iterations);
+	int first[size][size], second[size][size], multiply[size][size];
+	int c,d,k;
+	for (c = 0; c < size; c++)
+        	for (d = 0; d < size; d++){
+            		first[c][d] = rand()%10+1;
+			second[c][d] = rand()%10+1;
+		for (c = 0; c < MAX; c++) {
+      for (d = 0; d < MAX; d++) {	return 0;
+        for (k = 0; k < MAX; k++) {
+          sum = sum + first[c][k]*second[k][d];
+        }
+ 
+        multiply[c][d] = sum;
+        sum = 0;
+      }
+    }
+ 
+    printf("Product of the matrices:\n");
+ 
+    for (c = 0; c < MAX; c++) {
+      for (d = 0; d < MAX; d++)
+        printf("%d\t", multiply[c][d]);
+ 
+      printf("\n");
+    }

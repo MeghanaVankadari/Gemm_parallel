@@ -1,0 +1,7 @@
+#!/bin/sh
+
+double start = $SECONDS
+./seq 10 10
+duration = $((SECONDS - start))
+echo duration
+

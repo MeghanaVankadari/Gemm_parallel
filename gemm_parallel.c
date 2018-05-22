@@ -7,9 +7,10 @@ int *first,*second,*multiply,*multiply_seq;
 #if defined(_OPENMP)
 	#include<omp.h>
 	#include<sys/sysinfo.h>
-	
+	;
 	void gemm_omp()
 	{
+		omp_set_num_threads(get_nprocs());
 		int c,d,k,tid,nthreads,sum = 0;
 	# pragma omp parallel shared ( first, second, multiply, size ) private (c, d, k, nthreads, tid )
 	{
@@ -115,9 +116,9 @@ int main(int argc,char *argv[])
 		exit(1);
 	}
 
-	*first = (int *)malloc(size*size*sizeof(int));
-	*second = (int *)malloc(size*size*sizeof(int));
-	*multiply = (int *)malloc(size*size*sizeof(int));
+	first = (int *)malloc(size*size*sizeof(int));
+	second = (int *)malloc(size*size*sizeof(int));
+	multiply = (int *)malloc(size*size*sizeof(int));
 	if(first ==NULL || second ==NULL || multiply == NULL)
 	{
 		printf("Failed to allocate memory\n");
