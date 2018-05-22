@@ -24,13 +24,12 @@ void *runner(void *param) {
    pthread_exit(0);
 }
 
+double cpu_time_used = 0;
 
 
 int main(int argc,char *argv[])
 {
 	clock_t start, end;
-     	double cpu_time_used;
-	start = clock();
 	if(argc!=3)
 	{
 		printf("usage: ./a.out size iterations\n");
@@ -39,6 +38,10 @@ int main(int argc,char *argv[])
 
 	size = atoi(argv[1]);
 	int iterations = atoi(argv[2]);
+	int ite;
+	for(ite = 0;ite<iterations;ite++)
+	{
+	start = clock();
 	pthread_t *tid = (pthread_t *)malloc(size*size*sizeof(pthread_t));
 	pthread_attr_t attr;
         pthread_attr_init(&attr);
@@ -74,7 +77,7 @@ int main(int argc,char *argv[])
       		for (d = 0; d < size; d++)
 			pthread_join(*(tid+c*size+d),NULL);
 	}
-	printf("first matrix\n");
+	/*printf("first matrix\n");
 	for (c = 0; c < size; c++) {
           	for (d = 0; d < size; d++)
          		printf("%d\t", *(first+c*size+d));
@@ -92,9 +95,11 @@ int main(int argc,char *argv[])
       		for (d = 0; d < size; d++)
         		printf("%d\t", *(multiply+c*size+d));
       	printf("\n");
-    	}
+    	}*/
 	end = clock();
-	cpu_time_used = ((double)(end-start))/CLOCKS_PER_SEC;
-	printf("Took %f seconds to execute\n",cpu_time_used);
+	cpu_time_used = cpu_time_used+((double)(end-start))/CLOCKS_PER_SEC;
+	}
+	cpu_time_used = cpu_time_used / iterations;
+	printf("%d	%f\n",size,cpu_time_used);
 	return 0;
 }

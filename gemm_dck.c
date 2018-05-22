@@ -1,22 +1,20 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<time.h>
-#include<omp.h>
-#include<sys/sysinfo.h>
-double cpu_time_used = 0;
-int main(int argc,char *argv[]) {
+double cpu_time_used = 0; int main(int argc,char *argv[]) {
 	clock_t start, end;
+	start = clock();
 	if(argc!=3)
 	{
 		printf("usage: ./a.out size iterations\n");
 		exit(1);
 	}
-	omp_set_num_threads(get_nprocs());
+	
 	int size = atoi(argv[1]);
 	int iterations = atoi(argv[2]);
 	//printf("size = %d , iterations = %d\n",size,iterations);
-	int ite;
-	for(ite = 0 ; ite<iterations;ite++)
+	int ite = 0;
+	for(ite = 0; ite < iterations ; ite++)
 	{
 	start = clock();
 	int *first = (int *)malloc(size*size*sizeof(int));
@@ -28,24 +26,11 @@ int main(int argc,char *argv[]) {
 		return -1;
 	}
 	int c,d,k,sum = 0;
-	int tid,nthreads;
-	# pragma omp parallel shared (first,second,multiply, size ) private (c, d, k, nthreads, tid )
-	{
-	tid = omp_get_thread_num();
-	//printf("Hello World from thread = %d\n", tid);
-	/*if (tid == 0) 
-	 {
- 		 nthreads = omp_get_num_threads();
-		 printf("Number of threads = %d\n", nthreads);
- 	}*/
-
-	#pragma omp for
-		for (c = 0; c < size; c++)
+	for (c = 0; c < size; c++)
         	for (d = 0; d < size; d++){
             		*(first + c*size + d) = rand()%10+1;
 			*(second + c*size +d) = rand()%10+1;
 		}
-	#pragma omp for
 	for (c = 0; c < size; c++) {
       		for (d = 0; d < size; d++) {
         		for (k = 0; k < size; k++) {
@@ -56,15 +41,15 @@ int main(int argc,char *argv[]) {
         	sum = 0;
       		}
     	}
-	}/*
-    	printf("Product of the matrices:\n");
+ 
+    	/*printf("Product of the matrices:\n");
 	for (c = 0; c < size; c++) {
       		for (d = 0; d < size; d++)
         		printf("%d\t", *(multiply+c*size+d));
       	printf("\n");
     	}*/
 	end = clock();
-	cpu_time_used = cpu_time_used+((double)(end-start))/CLOCKS_PER_SEC;
+	cpu_time_used = cpu_time_used + ((double)(end-start))/CLOCKS_PER_SEC;
 	}
 	cpu_time_used = cpu_time_used / iterations;
 	printf("%d	%f\n",size,cpu_time_used);

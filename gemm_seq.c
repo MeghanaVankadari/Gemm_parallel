@@ -1,10 +1,10 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<time.h>
+double cpu_time_used = 0;
 int main(int argc,char *argv[])
 {
 	clock_t start, end;
-     	double cpu_time_used;
 	start = clock();
 	if(argc!=3)
 	{
@@ -15,6 +15,10 @@ int main(int argc,char *argv[])
 	int size = atoi(argv[1]);
 	int iterations = atoi(argv[2]);
 	//printf("size = %d , iterations = %d\n",size,iterations);
+	int ite = 0;
+	for(ite = 0; ite < iterations ; ite++)
+	{
+	start = clock();
 	int *first = (int *)malloc(size*size*sizeof(int));
 	int *second = (int *)malloc(size*size*sizeof(int));
 	int *multiply = (int *)malloc(size*size*sizeof(int));
@@ -40,14 +44,16 @@ int main(int argc,char *argv[])
       		}
     	}
  
-    	printf("Product of the matrices:\n");
+    	/*printf("Product of the matrices:\n");
 	for (c = 0; c < size; c++) {
       		for (d = 0; d < size; d++)
         		printf("%d\t", *(multiply+c*size+d));
       	printf("\n");
-    	}
+    	}*/
 	end = clock();
-	cpu_time_used = ((double)(end-start))/CLOCKS_PER_SEC;
-	printf("Took %f seconds to execute\n",cpu_time_used);
+	cpu_time_used = cpu_time_used + ((double)(end-start))/CLOCKS_PER_SEC;
+	}
+	cpu_time_used = cpu_time_used / iterations;
+	printf("%d	%f\n",size,cpu_time_used);
 	return 0;
 }
